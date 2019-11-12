@@ -7,3 +7,12 @@
 
 # .tfvars files
 *.tfvars
+
+# IntelliJ
+**/.idea/*
+
+# Build directory
+**/compiled/*
+
+# Node Modules
+**/node_modules/*
