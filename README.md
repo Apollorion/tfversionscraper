@@ -22,6 +22,8 @@ Edit launcher.yml vars, to be unique to you:
         key: "tfversionscraper.tfstate"
       vars:
         dump_bucket_name: "tfversionscraper"
+        # Optional:
+        # docs_base_url: "https://apollorion.com/"
 ```
 Under `vars.terraform.vars` there is an optional variable `docs_base_url`.  
 If this variable is included, it will replace S3 URLS in the publicly available documentation.
