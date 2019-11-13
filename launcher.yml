@@ -13,6 +13,8 @@
         key: "tfversionscraper.tfstate"
       vars:
         dump_bucket_name: "tfversionscraper"
+        # Optional:
+        # docs_base_url: "https://apollorion.com/"
 
   tasks:
 
@@ -25,6 +27,16 @@
           - terraform.backend_config.bucket is defined
           - terraform.backend_config.key is defined
           - terraform.vars.dump_bucket_name is defined
+
+    - name: "Set the docs base URL"
+      set_fact:
+        docs_base_url: "{{ terraform.vars.docs_base_url }}"
+      when: terraform.vars.docs_base_url is defined
+
+    - name: "Default the docs base URL"
+      set_fact:
+        docs_base_url: "NOT_SET"
+      when: terraform.vars.docs_base_url is not defined
 
     - name: "Build TF Version Scraper"
       block:
@@ -72,6 +84,7 @@
               aws_region: "{{ aws_config.region }}"
               aws_profile: "{{ aws_config.profile }}"
               bucket_name: "{{ terraform.vars.dump_bucket_name }}"
+              docs_base_url: "{{ docs_base_url }}"
 
       rescue:
         - name: "Just keep swimming"

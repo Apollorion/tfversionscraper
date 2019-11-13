@@ -40,6 +40,16 @@ async function getChecksums(version, short_version) {
     return sumsArray;
 }
 
+async function uploadToS3(key, data){
+    return s3.putObject({
+        Bucket: process.env.bucket_name,
+        Key: key,
+        ACL:'public-read',
+        Body: JSON.stringify(data),
+        ContentType: "application/json"
+    }).promise();
+}
+
 exports.handler = async function(event, context, callback) {
     let versions = await fetchData("li", baseSiteUrl);
 
@@ -74,15 +84,17 @@ exports.handler = async function(event, context, callback) {
     }
 
     // Let everyone know what the latest version is
-    data["latest"] = shortVersions.sort(semver.rcompare)[0];
+    data = { "latest": shortVersions.sort(semver.rcompare)[0], ...data};
 
-    // Upload to s3
-    await s3.putObject({
-        Bucket: process.env.bucket_name,
-        Key: 'allversions.json',
-        ACL:'public-read',
-        Body: JSON.stringify(data),
-        ContentType: "application/json"
-    }).promise();
+    // Upload to s3, all versions
+    await uploadToS3('all', data);
+
+    // Upload to s3, latest version
+    await uploadToS3("latest", data[data["latest"]]);
+
+    // upload to s3, individual versions
+    for(let version of shortVersions){
+        await uploadToS3(version, data[version]);
+    }
 
 };

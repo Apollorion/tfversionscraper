@@ -13,6 +13,11 @@ variable "bucket_name" {
   type    = string
 }
 
+variable "docs_base_url" {
+  default = "NOT_SET"
+  type    = string
+}
+
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
@@ -91,7 +96,7 @@ resource "aws_s3_bucket" "main" {
   acl    = "public-read"
 
   website {
-    index_document = "allversions.json"
+    index_document = "how"
   }
 }
 
