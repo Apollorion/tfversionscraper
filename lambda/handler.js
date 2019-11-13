@@ -12,8 +12,9 @@ const fetchData = async (item, url) => {
     let data = [];
     $(item).each(function(i, elm) {
         let element = $(elm).text().trim();
-        if(element !== "../")
-        data.push(element);
+        if(element !== "../") {
+            data.push(element);
+        }
     });
     return data;
 
