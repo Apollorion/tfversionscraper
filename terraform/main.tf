@@ -18,6 +18,11 @@ variable "docs_base_url" {
   type    = string
 }
 
+variable "https" {
+  default = false
+  type    = string
+}
+
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
@@ -96,7 +101,7 @@ resource "aws_s3_bucket" "main" {
   acl    = "public-read"
 
   website {
-    index_document = "how"
+    index_document = "index.html"
   }
 }
 

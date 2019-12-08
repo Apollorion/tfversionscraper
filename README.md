@@ -22,13 +22,17 @@ Edit launcher.yml vars, to be unique to you:
         key: "tfversionscraper.tfstate"
       vars:
         dump_bucket_name: "tfversionscraper"
+        https: true
         # Optional:
-        # docs_base_url: "https://apollorion.com/"
+        # docs_base_url: "terraform.apollorion.com"
 ```
 Under `vars.terraform.vars` there is an optional variable `docs_base_url`.  
 If this variable is included, it will replace S3 URLS in the publicly available documentation.
-If included, it should have a protocol (http, https) as well as end with a forward slash ("/"). 
+If included, it should NOT include a protocol (http, https) and it should NOT end with a forward slash ("/"). 
 If excluded, it will generate the URL from the S3 website.
+
+Under `vars.terraform.vars` there is a required variable `https`. 
+This should be true if you are using `docs_base_url` with ssl, otherwise it should be false. 
   
 run launcher.yml `ansible-playbook launcher.yml`
 
@@ -50,4 +54,4 @@ When launcher.yml is ran successfully, a number of things will happen.
 # API usage
 
 After running the playbook, documentation will be available at:  
-`http://<BUCKET>.s3-website.<REGION>.amazonaws.com/`
+`http://<BUCKET>.s3-website.<REGION>.amazonaws.com/` or your docs_base_url

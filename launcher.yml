@@ -13,8 +13,9 @@
         key: "tfversionscraper.tfstate"
       vars:
         dump_bucket_name: "tfversionscraper"
+        https_enabled: true
         # Optional:
-        # docs_base_url: "https://apollorion.com/"
+        # docs_base_url: "terraform.apollorion.com"
 
   tasks:
 
@@ -27,6 +28,7 @@
           - terraform.backend_config.bucket is defined
           - terraform.backend_config.key is defined
           - terraform.vars.dump_bucket_name is defined
+          - terraform.vars.https_enabled is defined
 
     - name: "Set the docs base URL"
       set_fact:
@@ -85,6 +87,7 @@
               aws_profile: "{{ aws_config.profile }}"
               bucket_name: "{{ terraform.vars.dump_bucket_name }}"
               docs_base_url: "{{ docs_base_url }}"
+              https: "{{ terraform.vars.https_enabled | bool }}"
 
       rescue:
         - name: "Just keep swimming"
